@@ -1,24 +1,11 @@
 /**
-  Implement a list of diverse types, including
-  integers, double-precision floating point numbers,
-  and Strings.
+  Implement a list of diverse types.
  */
 
 public class List_inArraySlots {
 
-    private int[]    intElements;
-    private double[] doubleElements;
-    private String[] stringElements;
-    private int filledElements = 0; // the number of elements in this list
-    
-    /* type identifier for each element
-       That is, typeOfElements[i] == 0 means element i is an integer;
-                                     1 means element i is a double;
-                                     2 means element i is a String.
-        Optional extra education in programming (not comp sci):
-            replace these "magic numbers" with an "enumerated type".
-     */
-    private int[] typeOfElements;
+    private int filledElements; // the number of elements in this list
+    private Object[] list;
 
     private static final int INITIAL_CAPACITY = 10;
 
@@ -26,9 +13,7 @@ public class List_inArraySlots {
       Construct an empty list with a small initial capacity.
      */
     public List_inArraySlots() {
-	intElements = new int[10];
-	doubleElements = new double[10];
-	stringElements = new String[10];
+      list = new Object[ INITIAL_CAPACITY];
     }
 
 
@@ -36,42 +21,22 @@ public class List_inArraySlots {
       @return the number of elements in this list
      */
     public int size() {
-	int s = 0;
-	for (int num: intElements)
-	    s += 1;
-	for (double num: doubleElements)
-	    s += 1;
-	for (String str: stringElements)
-	    s += 1;
-	return s;
+      return filledElements;
     }
 
 
-    /**
+     /**
        @return a string representation of this list,
        in [a,b,c,] format
-    */
+      */
     public String toString() {
-	String s = "[";
-	int intIndex = 0;
-	int doubleIndex = 0;
-	int stringIndex = 0;
-	if (filledElements == 0){
-	    return "[]";
-	}
-	for (int num: typeOfElements){
-	    if (num == 0){
-		s += intElements[intIndex] + ", ";
-		intIndex ++;
-	    }
-	    if (num == 1){
-		s += doubleElements[doubleIndex] + ", ";
-		doubleIndex ++;
-	    }
-	    s += stringElements[stringIndex] + ", ";
-	    stringIndex++;
-	}
-	return s + "]";
+      String stringRep = "[";
+
+      for (int index = 0; index < filledElements; index++)
+        stringRep += list[index] + ",";
+
+      stringRep += "]";
+      return stringRep;
     }
 
 
@@ -80,25 +45,32 @@ public class List_inArraySlots {
 
       @return true, in keeping with conventions yet to be discussed
      */
-     // public boolean add( int type   // same meaning as in typeOfElements
-                       // , int    intValue
-                       // , double doubleValue
-                       // , String stringValue
-                       // ) {
-     // }
+     public boolean add( Object val) {
+        // expand when at max
+        if (filledElements == list.length) expand();
+        list[ filledElements++] = val;
+        return true;
+     }
 
 
     /**
       Double the capacity of the List_inArraySlots,
       preserving existing data.
      */
-     // private void expand() {
-        // System.out.println( "expand... (for debugging)");
-           // /* S.O.P. rules for debugging:
-              // Working methods should be silent. But during
-              // development, the programmer must verify that
-              // this method is called when that is appropriate.
-              // So test using the println(), then comment it out.
-              // */
-     // }
+     private void expand() {
+        // create new list, copy values over, and replace list
+        Object[] bigger = new Object[list.length * 2];
+
+        // copy existing elements
+        for(int index=0; index<list.length; index++)
+            bigger[index] = list[index];
+
+        list = bigger;
+     }
+
+
+     public Object get( int index){
+        // pass-through request
+        return list[ index];
+    }
 }
